@@ -1,0 +1,36 @@
+# Node deps and logs (both apps)
+node_modules/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+package-lock.json
+yarn.lock
+pnpm-lock.yaml
+logs/
+*.log
+*.log.*
+
+# Environment files (frontend + backend)
+.env
+.env.*
+!.env.example
+*.local
+*.dev.local
+*.test.local
+*.prod.local
+
+# Build outputs
+dist/
+build/
+coverage/
+.tmp/
+.cache/
+
+# OS/editor
+.DS_Store
+Thumbs.db
+*.swp
+*.swo
+.vscode/
+.idea/
