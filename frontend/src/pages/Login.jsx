@@ -5,9 +5,9 @@ import { useNavigate } from 'react-router-dom';
 export default function Login() {
   const { login } = useAuth();
   const nav = useNavigate();
-  const [email,setEmail]=useState('');
-  const [password,setPassword]=useState('');
-  const [err,setErr]=useState('');
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
+  const [err, setErr] = useState('');
 
   const submit = async (e) => {
     e.preventDefault();
@@ -21,12 +21,28 @@ export default function Login() {
   };
 
   return (
-    <form onSubmit={submit} style={{padding:16,maxWidth:360}}>
+    <div className="container" style={{ maxWidth: 400 }}>
       <h2>Login</h2>
-      <input placeholder="Email" value={email} onChange={e=>setEmail(e.target.value)} style={{display:'block',marginBottom:8,width:'100%'}} />
-      <input placeholder="Password" type="password" value={password} onChange={e=>setPassword(e.target.value)} style={{display:'block',marginBottom:8,width:'100%'}} />
-      {err && <div style={{color:'red',marginBottom:8}}>{err}</div>}
-      <button type="submit">Login</button>
-    </form>
+      <form onSubmit={submit}>
+        <input
+          className="input"
+          placeholder="Email"
+          type="email"
+          value={email}
+          onChange={e => setEmail(e.target.value)}
+        />
+        <input
+          className="input"
+          placeholder="Password"
+          type="password"
+          value={password}
+          onChange={e => setPassword(e.target.value)}
+        />
+        {err && <div className="error">{err}</div>}
+        <button className="btn" type="submit" style={{ width: '100%', marginTop: 12 }}>
+          Login
+        </button>
+      </form>
+    </div>
   );
 }

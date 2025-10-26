@@ -5,10 +5,10 @@ import { useNavigate } from 'react-router-dom';
 export default function Register() {
   const { register } = useAuth();
   const nav = useNavigate();
-  const [username,setUsername]=useState('');
-  const [email,setEmail]=useState('');
-  const [password,setPassword]=useState('');
-  const [err,setErr]=useState('');
+  const [username, setUsername] = useState('');
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
+  const [err, setErr] = useState('');
 
   const submit = async (e) => {
     e.preventDefault();
@@ -22,13 +22,34 @@ export default function Register() {
   };
 
   return (
-    <form onSubmit={submit} style={{padding:16,maxWidth:360}}>
+    <div className="container" style={{ maxWidth: 400 }}>
       <h2>Register</h2>
-      <input placeholder="Username" value={username} onChange={e=>setUsername(e.target.value)} style={{display:'block',marginBottom:8,width:'100%'}} />
-      <input placeholder="Email" value={email} onChange={e=>setEmail(e.target.value)} style={{display:'block',marginBottom:8,width:'100%'}} />
-      <input placeholder="Password" type="password" value={password} onChange={e=>setPassword(e.target.value)} style={{display:'block',marginBottom:8,width:'100%'}} />
-      {err && <div style={{color:'red',marginBottom:8}}>{err}</div>}
-      <button type="submit">Create account</button>
-    </form>
+      <form onSubmit={submit}>
+        <input
+          className="input"
+          placeholder="Username"
+          value={username}
+          onChange={e => setUsername(e.target.value)}
+        />
+        <input
+          className="input"
+          placeholder="Email"
+          type="email"
+          value={email}
+          onChange={e => setEmail(e.target.value)}
+        />
+        <input
+          className="input"
+          placeholder="Password"
+          type="password"
+          value={password}
+          onChange={e => setPassword(e.target.value)}
+        />
+        {err && <div className="error">{err}</div>}
+        <button className="btn" type="submit" style={{ width: '100%', marginTop: 12 }}>
+          Create Account
+        </button>
+      </form>
+    </div>
   );
 }

@@ -12,17 +12,39 @@ export default function PlaylistView() {
     api.get(`/api/playlists/${id}`).then(r => setPl(r.data)).catch(console.error);
   }, [id]);
 
-  if (!pl) return <div style={{padding:16}}>Loading...</div>;
+  if (!pl) return <div className="container">Loading...</div>;
 
   return (
-    <div style={{padding:16}}>
+    <div className="container">
       <h2>{pl.name}</h2>
-      {(pl.songs || []).map(s => (
-        <div key={s._id} style={{display:'flex',gap:8,alignItems:'center',marginBottom:6}}>
-          <span>{s.title} — {s.artist}</span>
-          <button onClick={() => play(s)}>Play</button>
+      {(pl.songs || []).length === 0 ? (
+        <div className="empty">
+          <h3>No songs in this playlist</h3>
         </div>
-      ))}
+      ) : (
+        <div className="grid cols-2">
+          {(pl.songs || []).map(s => (
+            <div key={s._id} className="card">
+              <div className="row" style={{ justifyContent: 'space-between' }}>
+                <div className="row" style={{ flex: 1 }}>
+                  {s.coverImage ? (
+                    <img className="cover" src={s.coverImage} alt="" />
+                  ) : (
+                    <div className="cover" />
+                  )}
+                  <div>
+                    <div className="title">{s.title}</div>
+                    <div className="subtitle">{s.artist}</div>
+                  </div>
+                </div>
+                <button className="btn" onClick={() => play(s)}>
+                  ▶ Play
+                </button>
+              </div>
+            </div>
+          ))}
+        </div>
+      )}
     </div>
   );
 }
