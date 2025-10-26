@@ -1,105 +1,54 @@
+const cloudinary = require('cloudinary').v2;
 const Song = require('../models/Song');
 
-// Upload song
+cloudinary.config({
+  cloud_name: process.env.CLOUDINARY_CLOUD_NAME,
+  api_key: process.env.CLOUDINARY_API_KEY,
+  api_secret: process.env.CLOUDINARY_API_SECRET
+});
+
+const uploadStream = (buffer, options) =>
+  new Promise((resolve, reject) => {
+    const stream = cloudinary.uploader.upload_stream(options, (err, res) => {
+      if (err) return reject(err);
+      resolve(res);
+    });
+    stream.end(buffer);
+  });
+
 exports.uploadSong = async (req, res) => {
   try {
-    const { title, artist, album, genre, duration } = req.body;
-    
-    if (!req.files || !req.files.audio) {
-      return res.status(400).json({ message: 'Audio file is required' });
-    }
+    const { title, artist } = req.body;
+    if (!title || !artist) return res.status(400).json({ message: 'title and artist required' });
 
-    const audioUrl = req.files.audio[0].path;
-    const coverImage = req.files.cover ? req.files.cover[0].path : null;
+    const audioFile = req.files?.audio?.[0];
+    if (!audioFile) return res.status(400).json({ message: 'audio file required' });
 
-    const song = new Song({
-      title,
-      artist,
-      album,
-      genre,
-      duration,
-      audioUrl,
-      coverImage,
-      uploadedBy: req.user._id,
+    // Upload audio as 'video' resource type
+    const audioRes = await uploadStream(audioFile.buffer, {
+      resource_type: 'video',
+      folder: 'songs'
     });
 
-    await song.save();
-    res.status(201).json({ message: 'Song uploaded successfully', song });
-  } catch (error) {
-    res.status(500).json({ message: 'Server error', error: error.message });
-  }
-};
-
-// Get all songs
-exports.getAllSongs = async (req, res) => {
-  try {
-    const songs = await Song.find().populate('uploadedBy', 'username').sort({ createdAt: -1 });
-    res.json(songs);
-  } catch (error) {
-    res.status(500).json({ message: 'Server error', error: error.message });
-  }
-};
-
-// Get song by ID
-exports.getSongById = async (req, res) => {
-  try {
-    const song = await Song.findById(req.params.id).populate('uploadedBy', 'username');
-    if (!song) {
-      return res.status(404).json({ message: 'Song not found' });
-    }
-    res.json(song);
-  } catch (error) {
-    res.status(500).json({ message: 'Server error', error: error.message });
-  }
-};
-
-// Search songs
-exports.searchSongs = async (req, res) => {
-  try {
-    const { query } = req.query;
-    const songs = await Song.find({
-      $or: [
-        { title: { $regex: query, $options: 'i' } },
-        { artist: { $regex: query, $options: 'i' } },
-        { album: { $regex: query, $options: 'i' } },
-      ],
-    }).populate('uploadedBy', 'username');
-    res.json(songs);
-  } catch (error) {
-    res.status(500).json({ message: 'Server error', error: error.message });
-  }
-};
-
-// Increment play count
-exports.incrementPlayCount = async (req, res) => {
-  try {
-    const song = await Song.findByIdAndUpdate(
-      req.params.id,
-      { $inc: { playCount: 1 } },
-      { new: true }
-    );
-    res.json(song);
-  } catch (error) {
-    res.status(500).json({ message: 'Server error', error: error.message });
-  }
-};
-
-// Delete song
-exports.deleteSong = async (req, res) => {
-  try {
-    const song = await Song.findById(req.params.id);
-    
-    if (!song) {
-      return res.status(404).json({ message: 'Song not found' });
+    let coverUrl = null;
+    const coverFile = req.files?.cover?.[0];
+    if (coverFile) {
+      const coverRes = await uploadStream(coverFile.buffer, {
+        folder: 'covers'
+      });
+      coverUrl = coverRes.secure_url;
     }
 
-    if (song.uploadedBy.toString() !== req.user._id.toString()) {
-      return res.status(403).json({ message: 'Not authorized to delete this song' });
-    }
+    const song = await Song.create({
+      title,
+      artist,
+      audioUrl: audioRes.secure_url,
+      coverImage: coverUrl
+    });
 
-    await song.deleteOne();
-    res.json({ message: 'Song deleted successfully' });
-  } catch (error) {
-    res.status(500).json({ message: 'Server error', error: error.message });
+    return res.status(201).json(song);
+  } catch (e) {
+    console.error('Upload error:', e);
+    return res.status(500).json({ message: 'Upload failed', error: e.message });
   }
 };

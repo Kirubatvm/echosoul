@@ -1,13 +1,28 @@
-body {
-  margin: 0;
-  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
-    'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
-    sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
+:root{
+  --bg:#0f1115; --panel:#151822; --text:#e5e7eb; --muted:#9ca3af; --brand:#7c3aed; --brand-2:#22d3ee;
+  --border:#262b36; --hover:#1b2030;
 }
-
-code {
-  font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
-    monospace;
-}
+*{box-sizing:border-box}
+html,body,#root{height:100%}
+body{margin:0;background:linear-gradient(180deg,#0f1115 0%,#0b0e14 100%);color:var(--text);font:14px/1.4 Inter,system-ui,Segoe UI,Roboto,Helvetica,Arial,sans-serif}
+a{color:var(--text);text-decoration:none}
+a:hover{opacity:.9}
+.container{max-width:1100px;margin:0 auto;padding:24px}
+.header{position:sticky;top:0;z-index:10;backdrop-filter: blur(8px);background:rgba(15,17,21,.6);border-bottom:1px solid var(--border)}
+.nav{display:flex;gap:16px;align-items:center;padding:12px 24px}
+.nav .spacer{flex:1}
+.btn{background:var(--brand);border:none;color:#fff;padding:8px 12px;border-radius:8px;cursor:pointer}
+.btn.secondary{background:transparent;border:1px solid var(--border);color:var(--text)}
+.input, .file{width:100%;padding:10px 12px;border:1px solid var(--border);border-radius:8px;background:#0f121a;color:var(--text)}
+.grid{display:grid;gap:12px}
+.grid.cols-2{grid-template-columns:repeat(2,minmax(0,1fr))}
+.grid.cols-3{grid-template-columns:repeat(3,minmax(0,1fr))}
+.grid.cols-4{grid-template-columns:repeat(4,minmax(0,1fr))}
+.card{background:var(--panel);border:1px solid var(--border);border-radius:12px;padding:14px}
+.row{display:flex;align-items:center;gap:12px}
+.subtitle{color:var(--muted);font-size:12px}
+.footerbar{position:fixed;left:0;right:0;bottom:0;background:var(--panel);border-top:1px solid var(--border);padding:10px 16px;display:flex;align-items:center;gap:12px}
+.cover{width:48px;height:48px;border-radius:8px;object-fit:cover;border:1px solid var(--border);background:#0d0f15}
+.title{font-weight:600}
+.section{margin:20px 0}
+hr{border:0;border-top:1px solid var(--border);margin:16px 0}
