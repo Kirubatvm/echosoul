@@ -52,3 +52,35 @@ exports.uploadSong = async (req, res) => {
     return res.status(500).json({ message: 'Upload failed', error: e.message });
   }
 };
+
+// Get all songs
+exports.getAllSongs = async (req, res) => {
+  try {
+    const songs = await Song.find().sort({ createdAt: -1 });
+    return res.json(songs);
+  } catch (e) {
+    console.error('Get songs error:', e);
+    return res.status(500).json({ message: 'Failed to fetch songs' });
+  }
+};
+
+// Search songs by title or artist
+exports.searchSongs = async (req, res) => {
+  try {
+    const { query } = req.query;
+    if (!query) {
+      const songs = await Song.find().sort({ createdAt: -1 });
+      return res.json(songs);
+    }
+    const songs = await Song.find({
+      $or: [
+        { title: new RegExp(query, 'i') },
+        { artist: new RegExp(query, 'i') }
+      ]
+    }).sort({ createdAt: -1 });
+    return res.json(songs);
+  } catch (e) {
+    console.error('Search error:', e);
+    return res.status(500).json({ message: 'Search failed' });
+  }
+};
