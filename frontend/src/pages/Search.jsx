@@ -39,7 +39,7 @@ export default function Search() {
                   <div className="subtitle">{s.artist}</div>
                 </div>
               </div>
-              <button className="btn" onClick={() => play(s)}>
+              <button className="btn" onClick={() => play(s, songs)}>
                 ▶ Play
               </button>
             </div>

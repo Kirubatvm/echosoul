@@ -37,7 +37,7 @@ export default function PlaylistView() {
                     <div className="subtitle">{s.artist}</div>
                   </div>
                 </div>
-                <button className="btn" onClick={() => play(s)}>
+                <button className="btn" onClick={() => play(s, pl.songs || [])}>
                   ▶ Play
                 </button>
               </div>

@@ -33,7 +33,7 @@ export default function Home() {
                   <div className="subtitle">{s.artist}</div>
                 </div>
               </div>
-              <button className="btn" onClick={() => play(s)} style={{ width: '100%' }}>
+              <button className="btn" onClick={() => play(s, songs)} style={{ width: '100%' }}>
                 ▶ Play
               </button>
             </div>

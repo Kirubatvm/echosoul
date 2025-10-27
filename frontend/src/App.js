@@ -8,6 +8,7 @@ import Library from './pages/Library';
 import PlaylistView from './pages/PlaylistView';
 import Login from './pages/Login';
 import Register from './pages/Register';
+import NowPlaying from './components/NowPlaying';
 import { useLocation } from 'react-router-dom';
 
 function Protected({ children }) {
@@ -86,7 +87,7 @@ function Header() {
 }
 
 function AudioBar() {
-  const { current, isPlaying, toggle, progress, duration, seek } = usePlayer();
+  const { current, isPlaying, toggle, progress, duration, seek, setShowNowPlaying } = usePlayer();
 
   if (!current) return null;
 
@@ -108,7 +109,7 @@ function AudioBar() {
   const progressPercentage = duration > 0 ? (progress / duration) * 100 : 0;
 
   return (
-    <div className="footerbar">
+    <div className="footerbar" onClick={() => setShowNowPlaying(true)} style={{ cursor: 'pointer' }}>
       {current.coverImage && <img className="cover" src={current.coverImage} alt="" />}
       <div style={{ flex: 1, minWidth: 0 }}>
         <div className="title">{current.title}</div>
@@ -117,7 +118,10 @@ function AudioBar() {
       <div style={{ flex: 2, display: 'flex', flexDirection: 'column', gap: 4, minWidth: 200, maxWidth: 400 }}>
         <div
           className="seekbar"
-          onClick={handleSeek}
+          onClick={(e) => {
+            e.stopPropagation();
+            handleSeek(e);
+          }}
           style={{
             width: '100%',
             height: 6,
@@ -143,7 +147,14 @@ function AudioBar() {
           <span>{formatTime(duration)}</span>
         </div>
       </div>
-      <button className="btn" onClick={toggle} style={{ marginLeft: 12 }}>
+      <button
+        className="btn"
+        onClick={(e) => {
+          e.stopPropagation();
+          toggle();
+        }}
+        style={{ marginLeft: 12 }}
+      >
         {isPlaying ? '⏸ Pause' : '▶ Play'}
       </button>
     </div>
@@ -167,6 +178,7 @@ export default function App() {
             <Route path="*" element={<Navigate to="/" replace />} />
           </Routes>
           <AudioBar />
+          <NowPlaying />
         </PlayerProvider>
       </AuthProvider>
     </BrowserRouter>
