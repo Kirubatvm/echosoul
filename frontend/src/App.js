@@ -86,16 +86,64 @@ function Header() {
 }
 
 function AudioBar() {
-  const { current, isPlaying, toggle } = usePlayer();
+  const { current, isPlaying, toggle, progress, duration, seek } = usePlayer();
+
   if (!current) return null;
+
+  const formatTime = (seconds) => {
+    if (!seconds || isNaN(seconds)) return '0:00';
+    const mins = Math.floor(seconds / 60);
+    const secs = Math.floor(seconds % 60);
+    return `${mins}:${secs.toString().padStart(2, '0')}`;
+  };
+
+  const handleSeek = (e) => {
+    const rect = e.currentTarget.getBoundingClientRect();
+    const x = e.clientX - rect.left;
+    const percentage = x / rect.width;
+    const newTime = percentage * duration;
+    seek(newTime);
+  };
+
+  const progressPercentage = duration > 0 ? (progress / duration) * 100 : 0;
+
   return (
     <div className="footerbar">
       {current.coverImage && <img className="cover" src={current.coverImage} alt="" />}
-      <div style={{ flex: 1 }}>
+      <div style={{ flex: 1, minWidth: 0 }}>
         <div className="title">{current.title}</div>
         <div className="subtitle">{current.artist}</div>
       </div>
-      <button className="btn" onClick={toggle}>
+      <div style={{ flex: 2, display: 'flex', flexDirection: 'column', gap: 4, minWidth: 200, maxWidth: 400 }}>
+        <div
+          className="seekbar"
+          onClick={handleSeek}
+          style={{
+            width: '100%',
+            height: 6,
+            background: 'var(--border)',
+            borderRadius: 3,
+            cursor: 'pointer',
+            position: 'relative',
+            overflow: 'hidden'
+          }}
+        >
+          <div
+            style={{
+              width: `${progressPercentage}%`,
+              height: '100%',
+              background: 'var(--brand)',
+              borderRadius: 3,
+              transition: 'width 0.1s linear'
+            }}
+          />
+        </div>
+        <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: 11, color: 'var(--muted)' }}>
+          <span>{formatTime(progress)}</span>
+          <span>{formatTime(duration)}</span>
+        </div>
+      </div>
+      <button className="btn" onClick={toggle} style={{ marginLeft: 12 }}>
         {isPlaying ? '⏸ Pause' : '▶ Play'}
       </button>
     </div>

@@ -7,18 +7,31 @@ export function PlayerProvider({ children }) {
   const [current, setCurrent] = useState(null);
   const [isPlaying, setIsPlaying] = useState(false);
   const [progress, setProgress] = useState(0);
+  const [duration, setDuration] = useState(0);
   const [volume, setVolume] = useState(1);
 
   useEffect(() => {
     const a = audioRef.current;
     const onTime = () => setProgress(a.currentTime);
+    const onDuration = () => setDuration(a.duration);
     const onEnded = () => setIsPlaying(false);
+    
     a.addEventListener('timeupdate', onTime);
+    a.addEventListener('loadedmetadata', onDuration);
+    a.addEventListener('durationchange', onDuration);
     a.addEventListener('ended', onEnded);
-    return () => { a.removeEventListener('timeupdate', onTime); a.removeEventListener('ended', onEnded); };
+    
+    return () => {
+      a.removeEventListener('timeupdate', onTime);
+      a.removeEventListener('loadedmetadata', onDuration);
+      a.removeEventListener('durationchange', onDuration);
+      a.removeEventListener('ended', onEnded);
+    };
   }, []);
 
-  useEffect(() => { audioRef.current.volume = volume; }, [volume]);
+  useEffect(() => {
+    audioRef.current.volume = volume;
+  }, [volume]);
 
   const play = async (song) => {
     const a = audioRef.current;
@@ -31,15 +44,36 @@ export function PlayerProvider({ children }) {
     setIsPlaying(true);
   };
 
-  const pause = () => { audioRef.current.pause(); setIsPlaying(false); };
+  const pause = () => {
+    audioRef.current.pause();
+    setIsPlaying(false);
+  };
+
   const toggle = () => (isPlaying ? pause() : current ? play(current) : null);
-  const seek = (sec) => { audioRef.current.currentTime = sec; };
+
+  const seek = (sec) => {
+    audioRef.current.currentTime = sec;
+    setProgress(sec);
+  };
+
   const setVol = (v) => setVolume(v);
 
-  const value = useMemo(() => ({
-    audioRef, current, isPlaying, progress, volume,
-    play, pause, toggle, seek, setVolume: setVol
-  }), [current, isPlaying, progress, volume]);
+  const value = useMemo(
+    () => ({
+      audioRef,
+      current,
+      isPlaying,
+      progress,
+      duration,
+      volume,
+      play,
+      pause,
+      toggle,
+      seek,
+      setVolume: setVol
+    }),
+    [current, isPlaying, progress, duration, volume]
+  );
 
   return <PlayerContext.Provider value={value}>{children}</PlayerContext.Provider>;
 }

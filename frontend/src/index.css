@@ -330,3 +330,25 @@ form .file {
 .nav a:hover {
   background: var(--hover);
 }
+
+/* Seekbar styles */
+.seekbar {
+  position: relative;
+}
+
+.seekbar:hover {
+  height: 8px !important;
+}
+
+.seekbar:hover::after {
+  content: '';
+  position: absolute;
+  right: 0;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 12px;
+  height: 12px;
+  background: var(--brand-hover);
+  border-radius: 50%;
+  box-shadow: 0 2px 8px rgba(29, 185, 84, 0.5);
+}
