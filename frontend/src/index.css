@@ -13,6 +13,7 @@
   box-sizing: border-box;
   margin: 0;
   padding: 0;
+  -webkit-tap-highlight-color: transparent;
 }
 
 html, body, #root {
@@ -94,6 +95,7 @@ a:hover {
   font-size: 14px;
   transition: all 0.2s;
   box-shadow: 0 4px 12px rgba(29, 185, 84, 0.3);
+  min-height: 44px; /* Touch-friendly */
 }
 
 .btn:hover {
@@ -130,6 +132,7 @@ a:hover {
   color: var(--text);
   font-size: 14px;
   transition: border-color 0.2s;
+  min-height: 44px; /* Touch-friendly */
 }
 
 .input:focus,
@@ -285,52 +288,6 @@ form .file {
   margin-top: 8px;
 }
 
-/* Responsive adjustments */
-@media (max-width: 768px) {
-  .nav {
-    flex-wrap: wrap;
-    gap: 12px;
-  }
-
-  .grid.cols-2,
-  .grid.cols-3,
-  .grid.cols-4 {
-    grid-template-columns: 1fr;
-  }
-
-  h2 {
-    font-size: 22px;
-  }
-}
-
-/* Animations */
-@keyframes fadeIn {
-  from {
-    opacity: 0;
-    transform: translateY(10px);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
-}
-
-.card {
-  animation: fadeIn 0.3s ease;
-}
-
-/* Active nav link styles */
-.nav a {
-  border-radius: 8px;
-  padding: 8px 14px;
-  font-weight: 500;
-  transition: all 0.2s;
-}
-
-.nav a:hover {
-  background: var(--hover);
-}
-
 /* Seekbar styles */
 .seekbar {
   position: relative;
@@ -391,6 +348,8 @@ form .file {
   cursor: pointer;
   transition: color 0.2s;
   padding: 8px;
+  min-height: 44px;
+  min-width: 44px;
 }
 
 .close-btn:hover {
@@ -509,6 +468,8 @@ form .file {
   cursor: pointer;
   transition: all 0.2s;
   padding: 8px;
+  min-height: 44px;
+  min-width: 44px;
 }
 
 .control-btn:hover {
@@ -542,10 +503,129 @@ form .file {
   transform: scale(1);
 }
 
-/* Responsive adjustments */
+/* Animations */
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.card {
+  animation: fadeIn 0.3s ease;
+}
+
+/* Mobile Responsive - Tablets */
+@media (max-width: 1024px) {
+  .container {
+    padding: 24px 16px 100px;
+  }
+
+  .nav {
+    gap: 12px;
+    padding: 12px 16px;
+  }
+
+  .grid.cols-2,
+  .grid.cols-3,
+  .grid.cols-4 {
+    grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
+  }
+}
+
+/* Mobile Responsive - Phones */
 @media (max-width: 768px) {
+  .nav {
+    flex-wrap: wrap;
+    gap: 8px;
+    padding: 10px 12px;
+    justify-content: center;
+  }
+
+  .brand {
+    width: 100%;
+    text-align: center;
+    font-size: 18px;
+    margin-bottom: 4px;
+  }
+
+  .nav a {
+    font-size: 13px;
+    padding: 6px 10px;
+  }
+
+  .nav .row {
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 6px;
+  }
+
+  .container {
+    padding: 16px 12px 120px;
+  }
+
+  h2 {
+    font-size: 22px;
+    margin-bottom: 16px;
+  }
+
+  .grid.cols-2,
+  .grid.cols-3,
+  .grid.cols-4 {
+    grid-template-columns: 1fr;
+    gap: 12px;
+  }
+
+  .card {
+    padding: 12px;
+  }
+
+  .cover {
+    width: 48px;
+    height: 48px;
+  }
+
+  .title {
+    font-size: 14px;
+  }
+
+  .subtitle {
+    font-size: 12px;
+  }
+
+  .btn {
+    padding: 8px 16px;
+    font-size: 13px;
+  }
+
+  /* Footer bar mobile */
+  .footerbar {
+    padding: 10px 12px;
+    gap: 10px;
+    flex-wrap: wrap;
+  }
+
+  .footerbar .cover {
+    width: 48px;
+    height: 48px;
+  }
+
+  .footerbar .btn {
+    padding: 8px 14px;
+  }
+
+  /* Hide seekbar on very small screens, show only on tap */
+  .footerbar > div:nth-child(3) {
+    display: none;
+  }
+
+  /* Now Playing mobile */
   .artwork-container {
-    max-width: 300px;
+    max-width: 280px;
   }
 
   .song-title {
@@ -564,5 +644,72 @@ form .file {
 
   .control-btn {
     font-size: 28px;
+    min-width: 40px;
+    min-height: 40px;
+  }
+
+  .controls {
+    gap: 16px;
+  }
+
+  .artwork-placeholder {
+    font-size: 80px;
+  }
+
+  .close-btn {
+    font-size: 28px;
+    top: 0;
+  }
+
+  /* Form adjustments */
+  form {
+    max-width: 100%;
+  }
+
+  .input,
+  .file {
+    font-size: 16px; /* Prevents zoom on iOS */
+  }
+
+  /* Upload page - stack columns */
+  .container .grid.cols-2 {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* Small phones */
+@media (max-width: 480px) {
+  .brand {
+    font-size: 16px;
+  }
+
+  .nav a {
+    font-size: 12px;
+    padding: 5px 8px;
+  }
+
+  h2 {
+    font-size: 20px;
+  }
+
+  .footerbar {
+    padding: 8px 10px;
+  }
+
+  .btn {
+    min-height: 40px;
+    padding: 6px 12px;
+  }
+
+  .artwork-container {
+    max-width: 240px;
+  }
+
+  .song-title {
+    font-size: 20px;
+  }
+
+  .song-artist {
+    font-size: 14px;
   }
 }
