@@ -109,13 +109,28 @@ function AudioBar() {
   const progressPercentage = duration > 0 ? (progress / duration) * 100 : 0;
 
   return (
-    <div className="footerbar" onClick={() => setShowNowPlaying(true)} style={{ cursor: 'pointer' }}>
-      {current.coverImage && <img className="cover" src={current.coverImage} alt="" />}
-      <div style={{ flex: 1, minWidth: 0 }}>
-        <div className="title">{current.title}</div>
-        <div className="subtitle">{current.artist}</div>
+    <div className="footerbar-wrapper">
+      {/* Top row: Album cover, Song info, Play button */}
+      <div className="footerbar-top" onClick={() => setShowNowPlaying(true)} style={{ cursor: 'pointer' }}>
+        {current.coverImage && <img className="cover" src={current.coverImage} alt="" />}
+        <div style={{ flex: 1, minWidth: 0 }}>
+          <div className="title">{current.title}</div>
+          <div className="subtitle">{current.artist}</div>
+        </div>
+        <button
+          className="btn"
+          onClick={(e) => {
+            e.stopPropagation();
+            toggle();
+          }}
+        >
+          {isPlaying ? '⏸ Pause' : '▶ Play'}
+        </button>
       </div>
-      <div style={{ flex: 2, display: 'flex', flexDirection: 'column', gap: 4, minWidth: 200, maxWidth: 400 }}>
+
+      {/* Bottom row: Full-width seekbar with time labels */}
+      <div className="footerbar-bottom">
+        <span className="time-label">{formatTime(progress)}</span>
         <div
           className="seekbar"
           onClick={(e) => {
@@ -123,7 +138,7 @@ function AudioBar() {
             handleSeek(e);
           }}
           style={{
-            width: '100%',
+            flex: 1,
             height: 6,
             background: 'var(--border)',
             borderRadius: 3,
@@ -142,21 +157,8 @@ function AudioBar() {
             }}
           />
         </div>
-        <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: 11, color: 'var(--muted)' }}>
-          <span>{formatTime(progress)}</span>
-          <span>{formatTime(duration)}</span>
-        </div>
+        <span className="time-label">{formatTime(duration)}</span>
       </div>
-      <button
-        className="btn"
-        onClick={(e) => {
-          e.stopPropagation();
-          toggle();
-        }}
-        style={{ marginLeft: 12 }}
-      >
-        {isPlaying ? '⏸ Pause' : '▶ Play'}
-      </button>
     </div>
   );
 }

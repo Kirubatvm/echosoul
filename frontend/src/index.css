@@ -95,7 +95,7 @@ a:hover {
   font-size: 14px;
   transition: all 0.2s;
   box-shadow: 0 4px 12px rgba(29, 185, 84, 0.3);
-  min-height: 44px; /* Touch-friendly */
+  min-height: 44px;
 }
 
 .btn:hover {
@@ -132,7 +132,7 @@ a:hover {
   color: var(--text);
   font-size: 14px;
   transition: border-color 0.2s;
-  min-height: 44px; /* Touch-friendly */
+  min-height: 44px;
 }
 
 .input:focus,
@@ -149,7 +149,7 @@ a:hover {
 .container {
   max-width: 1200px;
   margin: 0 auto;
-  padding: 32px 24px 100px;
+  padding: 32px 24px 140px;
 }
 
 .section {
@@ -232,8 +232,8 @@ hr {
   margin: 16px 0;
 }
 
-/* Footer audio bar */
-.footerbar {
+/* Footer audio bar - Two row layout */
+.footerbar-wrapper {
   position: fixed;
   left: 0;
   right: 0;
@@ -241,17 +241,41 @@ hr {
   background: linear-gradient(180deg, rgba(20, 27, 45, 0.95), rgba(10, 14, 39, 0.98));
   backdrop-filter: blur(12px);
   border-top: 1px solid var(--border);
-  padding: 14px 20px;
+  padding: 12px 20px;
   display: flex;
-  align-items: center;
-  gap: 16px;
+  flex-direction: column;
+  gap: 8px;
   box-shadow: 0 -4px 16px rgba(0, 0, 0, 0.5);
   z-index: 999;
 }
 
-.footerbar .cover {
+.footerbar-top {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+
+.footerbar-top .cover {
   width: 54px;
   height: 54px;
+  border-radius: 8px;
+  object-fit: cover;
+  background: linear-gradient(135deg, #1e2437, #0a0e27);
+  border: 1px solid var(--border);
+  flex-shrink: 0;
+}
+
+.footerbar-bottom {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.time-label {
+  font-size: 11px;
+  color: var(--muted);
+  min-width: 40px;
+  text-align: center;
 }
 
 /* Empty state */
@@ -522,7 +546,7 @@ form .file {
 /* Mobile Responsive - Tablets */
 @media (max-width: 1024px) {
   .container {
-    padding: 24px 16px 100px;
+    padding: 24px 16px 140px;
   }
 
   .nav {
@@ -565,7 +589,7 @@ form .file {
   }
 
   .container {
-    padding: 16px 12px 120px;
+    padding: 16px 12px 150px;
   }
 
   h2 {
@@ -602,25 +626,32 @@ form .file {
     font-size: 13px;
   }
 
-  /* Footer bar mobile */
-  .footerbar {
+  /* Footer bar mobile - Two row layout */
+  .footerbar-wrapper {
     padding: 10px 12px;
-    gap: 10px;
-    flex-wrap: wrap;
   }
 
-  .footerbar .cover {
+  .footerbar-top {
+    gap: 10px;
+  }
+
+  .footerbar-top .cover {
     width: 48px;
     height: 48px;
   }
 
-  .footerbar .btn {
+  .footerbar-top .btn {
     padding: 8px 14px;
+    font-size: 13px;
   }
 
-  /* Hide seekbar on very small screens, show only on tap */
-  .footerbar > div:nth-child(3) {
-    display: none;
+  .footerbar-bottom {
+    gap: 8px;
+  }
+
+  .time-label {
+    font-size: 10px;
+    min-width: 35px;
   }
 
   /* Now Playing mobile */
@@ -668,7 +699,7 @@ form .file {
 
   .input,
   .file {
-    font-size: 16px; /* Prevents zoom on iOS */
+    font-size: 16px;
   }
 
   /* Upload page - stack columns */
@@ -692,7 +723,7 @@ form .file {
     font-size: 20px;
   }
 
-  .footerbar {
+  .footerbar-wrapper {
     padding: 8px 10px;
   }
 
